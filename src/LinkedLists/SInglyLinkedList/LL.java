@@ -1,10 +1,8 @@
 package LinkedLists.SInglyLinkedList;
 
-import org.w3c.dom.Node;
-
 public class LL {
-    private Node head;
-    private Node tail;
+    private ListNode head;
+    private ListNode tail;
     private int size;
 
     public LL() {
@@ -12,9 +10,9 @@ public class LL {
     }
 //Insertion in the LinkedList at the ahead of head
     public void insertFirst(int value){
-        Node node = new Node(value);
-        node.next = head;
-        head = node;
+        ListNode listNode = new ListNode(value);
+        listNode.next = head;
+        head = listNode;
 
         if (tail==null){
             tail = head;
@@ -27,9 +25,9 @@ public class LL {
             insertFirst(value);
             return;
         }
-        Node node = new Node(value);
-        tail.next = node;
-        tail = node;
+        ListNode listNode = new ListNode(value);
+        tail.next = listNode;
+        tail = listNode;
     }
 
     //Insert at any index in LinkedList
@@ -41,19 +39,33 @@ public class LL {
             insertLast(value);
             return;
         }else {
-            Node temp = head;
+            ListNode temp = head;
             for (int i = 1; i < index ; i++) {
                 temp = temp.next;
             }
-            Node node = new Node(value, temp.next);
-            temp.next = node;
+            ListNode listNode = new ListNode(value, temp.next);
+            temp.next = listNode;
             size++;
         }
     }
 
+    //Insertion using Recursion
+    public void insertRec(int value, int index){
+        head = insertRec(value, index, head);
+    }
+    private ListNode insertRec(int value, int index, ListNode listNode){
+        if (index == 0){
+            ListNode temp = new ListNode(value, listNode);
+            size++;
+            return temp;
+        }
+        listNode.next = insertRec(value, index-1, listNode.next);
+        return listNode;
+    }
+
     //Display the members of LinkedList
     public void display(){
-        Node temp = head;
+        ListNode temp = head;
         while(temp != null){
             System.out.print(temp.value + "->");
             temp = temp.next;
@@ -78,18 +90,18 @@ public class LL {
         if (size <= 1){
             return deleteAtFirst();
         }
-        Node secondLast = get(size - 2);
+        ListNode secondLast = get(size - 2);
         int value = tail.value;
         tail = secondLast;
         tail.next = null;
         return value;
     }
-    public Node get(int index){
-        Node node = head;
+    public ListNode get(int index){
+        ListNode listNode = head;
         for (int i = 0; i < index; i++) {
-            node = node.next;
+            listNode = listNode.next;
         }
-        return node;
+        return listNode;
     }
 
     //Delete at Particular index in List
@@ -100,7 +112,7 @@ public class LL {
             return deleteAtLast();
         }
         else{
-            Node prev = get(index - 1);
+            ListNode prev = get(index - 1);
             int value = prev.next.value;
 
             prev.next = prev.next.next;
@@ -109,28 +121,71 @@ public class LL {
     }
 
     //Find the value of Node
-    public Node find(int value){
-        Node node = head;
-        while(node != null){
-            if (node.value == value){
-                return node;
+    public ListNode find(int value){
+        ListNode listNode = head;
+        while(listNode != null){
+            if (listNode.value == value){
+                return listNode;
             }
-            node = node.next;
+            listNode = listNode.next;
         }
         return null;
     }
 
-    private class Node{
+    private class ListNode {
         private int value;
-        private Node next;
+        private ListNode next;
 
-        public Node(int value) {
+        public ListNode(int value) {
             this.value = value;
         }
 
-        public Node(int value, Node next) {
+        public ListNode(int value, ListNode next) {
             this.value = value;
             this.next = next;
         }
+    }
+
+
+    //Remove the duplicate elements from a sorted list
+    public void duplicate(){
+        ListNode listNode = head;
+        while(listNode.next != null){
+            if (listNode.value == listNode.next.value){
+                listNode.next = listNode.next.next;
+                size--;
+            }
+            else{
+                listNode = listNode.next;
+            }
+        }
+        tail = listNode;
+        tail.next = null;
+    }
+
+    //Merge the two list in the sorted order
+    public static  LL merge(LL first, LL second){
+        ListNode f = first.head;
+        ListNode s = second.head;
+        LL ans = new LL();
+
+        while(f != null && s != null){
+            if (f.value < s.value){
+                ans.insertLast(f.value);
+                f = f.next;
+            }else{
+                ans.insertLast(s.value);
+                s = s.next;
+            }
+        }
+        while(f != null){
+            ans.insertLast(f.value);
+            f = f.next;
+        }
+        while(s != null){
+            ans.insertLast(s.value);
+            s = s.next;
+        }
+        return ans;
     }
 }

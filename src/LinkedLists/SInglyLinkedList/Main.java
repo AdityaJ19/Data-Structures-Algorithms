@@ -12,11 +12,14 @@ public class Main {
         list.insertLast(11);
         list.insertAtIndex(13,3);
         list.display();
-        System.out.println(list.deleteAtFirst());
-        list.display();
-        System.out.println(list.deleteAtLast());
-        list.display();
-        System.out.println(list.deleteAtIndex(2));
+//        System.out.println(list.deleteAtFirst());
+//        list.display();
+//        System.out.println(list.deleteAtLast());
+//        list.display();
+//        System.out.println(list.deleteAtIndex(2));
+//        list.display();
+
+        list.insertRec(6, 3);
         list.display();
 
     }
